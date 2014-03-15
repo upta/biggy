@@ -80,12 +80,14 @@ namespace Biggy.JSON
         _items = TryLoadFileData(this.DbPath);
       }
 
-      public void Update(T item) {
-        base.Update(item);
+      public override int Update(T item) {
+        var result = base.Update(item);
         this.FlushToDisk();
+
+        return result;
       }
 
-      public void Add(T item) {
+      public override void Add(T item) {
         var json = JsonConvert.SerializeObject(item);
         //append the to the file
         using (var writer = File.AppendText(this.DbPath)) {
@@ -94,13 +96,13 @@ namespace Biggy.JSON
         base.Add(item);
       }
 
-      public void Clear() {
+      public override void Clear() {
         base.Clear();
         this.FlushToDisk();
       }
 
 
-      public bool Remove(T item) {
+      public override bool Remove(T item) {
         var removed = base.Remove(item);
         this.FlushToDisk();
         return removed;
